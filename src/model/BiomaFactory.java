@@ -58,4 +58,23 @@ public class BiomaFactory {
                 return new SentinelLadybug(999, 0.0, 0.0, "som genérico", 40.0, bioma);
         }
     }
+    public static Comunidade gerarComunidadePorBioma(String nomeBioma, Bioma bioma) {
+        switch (nomeBioma.toLowerCase()) {
+            case "amazônia":
+                return new Comunidade(1, "Comunidade Arara Azul", "Pedro", "92 98888-1122", "Manaus", 150, bioma);
+            case "cerrado":
+                return new Comunidade(2, "Veredas Vivas", "Vanessa", "61 99999-3344", "Brasília", 200, bioma);
+            case "caatinga":
+                return new Comunidade(3, "Sol do Sertão", "Matheus", "85 98765-4321", "Juazeiro do Norte", 180, bioma);
+            case "pantanal":
+                return new Comunidade(4, "Água Clara", "Leticia", "67 99876-5432", "Corumbá", 95, bioma);
+            case "mata atlântica":
+                return new Comunidade(5, "Vila Esperança", "Carol", "21 98765-0001", "Paraty", 260, bioma);
+            case "pampa":
+                return new Comunidade(6, "Campo Sereno", "Camila", "51 99666-7788", "Bagé", 130, bioma);
+            default:
+                return new Comunidade(0, "Comunidade Genérica", "Jessica", "00 90000-0000", "Desconhecida", 100, bioma);
+        }
+    }
+
 }

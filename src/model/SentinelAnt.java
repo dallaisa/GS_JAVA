@@ -30,4 +30,33 @@ public class SentinelAnt extends Sentinel {
     public String diagnostico(boolean detalhado) {
         return detalhado ? diagnostico() + ", MET=" + metano + ", UMID=" + umidade : diagnostico();
     }
+
+    //  Getters
+    public double getTemperatura() {
+        return temperatura;
+    }
+
+    public double getCo2() {
+        return co2;
+    }
+
+    public double getUmidade() {
+        return umidade;
+    }
+
+    public double getMetano() {
+        return metano;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public LocalDateTime getDhUltimoAlerta() {
+        return dhUltimoAlerta;
+    }
 }
