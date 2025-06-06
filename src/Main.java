@@ -1,55 +1,51 @@
 import model.*;
+
+import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Digite o nome do bioma:");
-        String nomeDigitado = sc.nextLine().trim().toLowerCase();
 
-        Bioma bioma = BiomaFactory.criarBioma(nomeDigitado);
-        SentinelAnt ant = BiomaFactory.criarAnt(nomeDigitado, bioma);
-        SentinelLadybug ladybug = BiomaFactory.criarLadybug(nomeDigitado, bioma);
-        Comunidade comunidade = BiomaFactory.gerarComunidadePorBioma(nomeDigitado, bioma);
-
-        // Exibe informações da comunidade e sensores
-        System.out.println(comunidade.getResumo());
-        System.out.println(ant.diagnostico(true));
-        System.out.println(ladybug.diagnostico());
-
-        Alerta alerta = avaliarRiscoAmbiental(ant);
-        AlertaComunidade ac = new AlertaComunidade(alerta, comunidade, "SMS");
-
-        // Exibe os alertas
-        System.out.println(alerta.emitirResumo());
-        System.out.println(ac.statusEnvio());
-    }
-
-    public static Alerta avaliarRiscoAmbiental(SentinelAnt ant) {
-        double temp = ant.getTemperatura();
-        double co2 = ant.getCo2();
-
-        int nivel;
-        String descricao;
-
-        if (temp > 40 && co2 > 350) {
-            nivel = 4;
-            descricao = "🔥 ALERTA CRÍTICO: Temperatura e CO₂ muito elevados";
-        } else if (temp > 37 && co2 > 300) {
-            nivel = 3;
-            descricao = "⚠️ RISCO SIGNIFICATIVO: Temperatura e CO₂ elevados";
-        } else if (temp > 35 && co2 <= 300) {
-            nivel = 2;
-            descricao = "⚠️ RISCO LEVE: Temperatura acima do ideal";
-        } else {
-            nivel = 1;
-            descricao = "✅ Condições estáveis";
+        System.out.println("=== BIOMAS MONITORADOS ===");
+        List<String> biomasDisponiveis = BiomaFactory.getBiomasDisponiveis();
+        for (String nome : biomasDisponiveis) {
+            System.out.println("- " + nome);
         }
 
-        return new Alerta(1, "ANT", nivel, descricao, ant);
+        // Solicita ao usuário o nome do bioma que deseja verificar
+        System.out.print("\nQual bioma quer verificar: ");
+        String nomeBioma = sc.nextLine().trim().toLowerCase();
+
+        // Cria as instâncias dos objetos relacionados ao bioma escolhido
+        Bioma bioma = BiomaFactory.criarBioma(nomeBioma);
+        SentinelAnt ant = BiomaFactory.criarAnt(nomeBioma, bioma);
+        SentinelLadybug ladybug = BiomaFactory.criarLadybug(nomeBioma, bioma);
+        Comunidade comunidade = BiomaFactory.gerarComunidadePorBioma(nomeBioma, bioma);
+
+        // Exibe resumo da comunidade vinculada ao bioma
+        System.out.println("\n--- RESUMO DA COMUNIDADE ---");
+        System.out.println(comunidade.getResumo());
+
+        // Exibe diagnóstico dos microrrobôs SentinelAnt e SentinelLadybug
+        System.out.println("\n--- DIAGNÓSTICO DOS MICRORROBÔS ---");
+        System.out.println(ant.diagnostico(true));    // diagnóstico detalhado para o ant
+        System.out.println(ladybug.diagnostico());
+
+        // Avalia os riscos baseando-se nos dados do SentinelAnt e gera alerta
+        Alerta alerta = AvaliarRiscos.avaliar(ant);
+
+        // Cria um alerta comunitário, simulando envio por SMS para a comunidade
+        AlertaComunidade alertaComunitario = new AlertaComunidade(alerta, comunidade, "SMS");
+
+        // Exibe os alertas gerados e o status do envio
+        System.out.println("\n--- ALERTAS ---");
+        System.out.println(alerta.emitirResumo());
+        System.out.println(alertaComunitario.statusEnvio());
+
+        sc.close();
     }
-
 }
-

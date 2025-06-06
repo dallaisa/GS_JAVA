@@ -1,7 +1,19 @@
 package model;
 
+import java.util.List;
+
+/**
+ * Fábrica para criação de objetos relacionados a Biomas, Sentinels e Comunidades,
+ * com dados pré-definidos para cada bioma.
+ */
 public class BiomaFactory {
 
+    /**
+     * Cria um objeto Bioma a partir do nome informado.
+     *
+     * @param nome Nome do bioma.
+     * @return Bioma correspondente ao nome ou um bioma genérico se não reconhecido.
+     */
     public static Bioma criarBioma(String nome) {
         switch (nome.toLowerCase()) {
             case "amazônia":
@@ -21,25 +33,47 @@ public class BiomaFactory {
         }
     }
 
+    /**
+     * Cria um SentinelAnt configurado para o bioma informado.
+     * Cada bioma tem parâmetros específicos que influenciam os níveis de risco.
+     *
+     * @param nomeBioma Nome do bioma.
+     * @param bioma Instância do bioma.
+     * @return Objeto SentinelAnt configurado para o bioma.
+     */
     public static SentinelAnt criarAnt(String nomeBioma, Bioma bioma) {
         switch (nomeBioma.toLowerCase()) {
             case "amazônia":
-                return new SentinelAnt(101, -3.1, -60.0, 75.0, 32.0, 600, 2.5, bioma);
+                // CO₂ muito alto e temperatura acima do nível crítico → nível 4
+                return new SentinelAnt(101, -3.1, -60.0, 75.0, 42.0, 800, 2.5, bioma);
             case "cerrado":
-                return new SentinelAnt(102, -15.5, -47.5, 55.0, 33.0, 300, 1.8, bioma);
+                // Temperatura e CO₂ acima dos parâmetros de risco significativo → nível 3
+                return new SentinelAnt(102, -15.5, -47.5, 70.0, 38.5, 350, 1.8, bioma);
             case "caatinga":
-                return new SentinelAnt(103, -9.4, -40.3, 40.0, 38.0, 250, 1.5, bioma);
+                // Temperatura e CO₂ muito elevados → nível 4
+                return new SentinelAnt(103, -9.4, -40.3, 65.0, 39.0, 380, 1.5, bioma);
             case "pantanal":
-                return new SentinelAnt(104, -16.6, -56.1, 65.0, 30.0, 400, 2.0, bioma);
+                // Temperatura acima de 35 e CO₂ entre 300–350 → nível 2 ou 3
+                return new SentinelAnt(104, -16.6, -56.1, 60.0, 36.5, 320, 2.0, bioma);
             case "mata atlântica":
-                return new SentinelAnt(105, -23.5, -46.6, 70.0, 28.0, 350, 2.2, bioma);
+                // Valores mais moderados, ainda nível 2
+                return new SentinelAnt(105, -23.5, -46.6, 68.0, 34.5, 290, 2.2, bioma);
             case "pampa":
-                return new SentinelAnt(106, -30.0, -51.2, 50.0, 25.0, 200, 1.6, bioma);
+                // Temperatura ligeiramente acima de 35 e CO₂ > 300 → nível 2
+                return new SentinelAnt(106, -30.0, -51.2, 55.0, 37.2, 310, 1.6, bioma);
             default:
+                // Genérico (nível 1)
                 return new SentinelAnt(999, 0.0, 0.0, 0.0, 0.0, 100, 1.0, bioma);
         }
     }
 
+    /**
+     * Cria um SentinelLadybug configurado para o bioma informado.
+     *
+     * @param nomeBioma Nome do bioma.
+     * @param bioma Instância do bioma.
+     * @return Objeto SentinelLadybug configurado para o bioma.
+     */
     public static SentinelLadybug criarLadybug(String nomeBioma, Bioma bioma) {
         switch (nomeBioma.toLowerCase()) {
             case "amazônia":
@@ -58,6 +92,14 @@ public class BiomaFactory {
                 return new SentinelLadybug(999, 0.0, 0.0, "som genérico", 40.0, bioma);
         }
     }
+
+    /**
+     * Gera uma comunidade associada a um bioma específico.
+     *
+     * @param nomeBioma Nome do bioma.
+     * @param bioma Instância do bioma.
+     * @return Comunidade correspondente ao bioma.
+     */
     public static Comunidade gerarComunidadePorBioma(String nomeBioma, Bioma bioma) {
         switch (nomeBioma.toLowerCase()) {
             case "amazônia":
@@ -75,6 +117,15 @@ public class BiomaFactory {
             default:
                 return new Comunidade(0, "Comunidade Genérica", "Jessica", "00 90000-0000", "Desconhecida", 100, bioma);
         }
+    }
+
+    /**
+     * Retorna uma lista dos biomas disponíveis para uso no sistema.
+     *
+     * @return Lista com os nomes dos biomas.
+     */
+    public static List<String> getBiomasDisponiveis() {
+        return List.of("amazônia", "cerrado", "caatinga", "pantanal", "mata atlântica", "pampa");
     }
 
 }
